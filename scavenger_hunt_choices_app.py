@@ -4,6 +4,32 @@ from fpdf import FPDF
 import os
 import re
 import textwrap
+from credentials import USER_CREDENTIALS
+
+
+# Authentication function
+def authenticate(username, password):
+    return USER_CREDENTIALS.get(username) == password
+
+# Authentication section at the top
+if "authenticated" not in st.session_state:
+    st.session_state.authenticated = False
+
+if not st.session_state.authenticated:
+    st.title("Login")
+    username = st.text_input("Username")
+    password = st.text_input("Password", type="password")
+    if st.button("Login"):
+        if authenticate(username, password):
+            st.session_state.authenticated = True
+            st.success("Login successful!")
+        else:
+            st.error("Invalid username or password")
+    st.stop()  # Stop further execution if not authenticated
+
+# App starts here after successful login
+st.title("Scavenger Hunt Generator")
+st.subheader("Create a customized scavenger hunt in minutes!")
 
 # Function to generate clues using OpenAI API
 def generate_clues_for_locations(locations, theme, difficulty):
@@ -108,9 +134,9 @@ def save_clues_to_pdf(selected_clues, filename="scavenger_hunt.pdf"):
     return filename
     
 
-# Streamlit App
-st.title("Scavenger Hunt Generator")
-st.subheader("Create a customized scavenger hunt in minutes!")
+## Streamlit App
+# st.title("Scavenger Hunt Generator")
+# st.subheader("Create a customized scavenger hunt in minutes!")
 
 # Input fields
 theme = st.text_input("Enter the theme (e.g. Birthday Party, Buffalo Bills, Elf on the Shelf, Wild Animals):", "Harry Potter")
