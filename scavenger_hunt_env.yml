@@ -1,0 +1,11 @@
+name: scavenger_hunt_env
+channels:
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+      - fpdf2
+      - openai
+      - flask
+      - streamlit
